@@ -1,9 +1,12 @@
 import * as express from "express";
 import { urlencoded, json } from "body-parser";
 import * as morgan from 'morgan';
-import { TackingRouter } from './routes/tracking/tracking.controller';
+import { AuthRouter } from './routes/auth/auth.controller';
 import { mongoose } from "./config/database";
 import { ProductRouter } from "./routes/product/product.controller";
+var session = require('express-session');
+var cookieParser = require('cookie-parser');
+var passport = require('passport');
 const app = express();
 app.use(json());
 app.use(urlencoded({
@@ -17,12 +20,20 @@ app.use(function (req, res, next) {
   next();
 });
 app.use(morgan("dev"));
-//calling databasesefile
+app.use(session({
+  secret: "hubdub12343",
+  reserve: true,
+  saveUninitialized: true,
+  resave: true,
+}))
+app.use(cookieParser());
+app.use(passport.initialize());
+app.use(passport.session());
 const goose = mongoose;
 app.get("/", (request: express.Request, response: express.Response) => {
   response.send("Welcome to  API");
 });
-app.use('/api', new TackingRouter().getRouter());
+app.use('/api', new AuthRouter().getRouter());
 app.use('/api', new ProductRouter().getRouter());
 app.use((err: Error & { status: number }, request: express.Request, response: express.Response, next: express.NextFunction): void => {
   console.log(err, request.body)

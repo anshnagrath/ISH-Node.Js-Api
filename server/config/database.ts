@@ -4,7 +4,7 @@ import * as mongoose from "mongoose";
 (mongoose as any).Promise = global.Promise;
 const mockgoose = new Mockgoose(mongoose);
 mockgoose.helper.setDbVersion("3.4.3");
-mongoose.set('debug', true);
+// mongoose.set('debug', true);
 
 mongoose.connect("mongodb://localhost:27017/devdb", {
   useMongoClient: true,
