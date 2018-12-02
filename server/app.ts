@@ -1,3 +1,4 @@
+import { MailRouter } from './routes/mail/mail.controller';
 import * as express from "express";
 import { urlencoded, json } from "body-parser";
 import * as morgan from 'morgan';
@@ -35,6 +36,7 @@ app.get("/", (request: express.Request, response: express.Response) => {
 });
 app.use('/api', new AuthRouter().getRouter());
 app.use('/api', new ProductRouter().getRouter());
+app.use('/api', new MailRouter().getRouter());
 app.use((err: Error & { status: number }, request: express.Request, response: express.Response, next: express.NextFunction): void => {
   console.log(err, request.body)
   response.status(err.status || 500);
